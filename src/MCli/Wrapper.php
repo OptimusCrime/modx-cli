@@ -1,0 +1,108 @@
+<?php
+namespace MCli;
+
+use MCli\Command\PackageSearchCommand;
+
+class Wrapper
+{
+    private static $instance = null;
+    private $modx;
+
+    public static function getInstance()
+    {
+        if (self::$instance === null) {
+            self::$instance = new Wrapper();
+        }
+
+        return self::$instance;
+    }
+
+    private function __construct()
+    {
+        $this->modx = null;
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.ExitExpression)
+     */
+    public function run()
+    {
+        $this->loadModx();
+        if ($this->modx === null) {
+            die('Could not load MODX. Are you sure there exists a config.core.php file in this tree?');
+        }
+
+        $application = new MCli('MCli', '0.0.1');
+        $application->add(new PackageSearchCommand);
+        $application->run();
+    }
+
+    public function getModx()
+    {
+        return $this->modx;
+    }
+
+    private function loadModx()
+    {
+        $configFile = $this->locateConfigFile();
+        if ($configFile === null) {
+            return;
+        }
+
+        $this->loadFiles($configFile);
+        $this->initModx();
+    }
+
+    private function locateConfigFile()
+    {
+        $currentPath = getcwd();
+        while (true) {
+            $configFilePath = $currentPath . '/config.core.php';
+            if (file_exists($configFilePath) and is_readable($configFilePath)) {
+                return $configFilePath;
+            }
+
+            $newPath = dirname($currentPath);
+            if ($newPath === $currentPath) {
+                return null;
+            }
+
+            $currentPath = $newPath;
+        }
+    }
+
+    private function loadFiles($configFile)
+    {
+        include_once $configFile;
+
+        if (defined('MODX_CORE_PATH')) {
+            include_once MODX_CORE_PATH . 'config/config.inc.php';
+            include_once MODX_CORE_PATH . 'model/modx/modx.class.php';
+        }
+    }
+
+    private function initModx()
+    {
+        if (!class_exists('\modX')) {
+            return;
+        }
+
+        define('MODX_API_MODE', true);
+
+        $this->modx = new \modX();
+        if (is_object($this->modx) and ($this->modx instanceof modX)) {
+            $this->modx->initialize('mgr');
+        }
+    }
+
+    private function __clone()
+    {
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
+     */
+    private function __wakeup()
+    {
+    }
+}

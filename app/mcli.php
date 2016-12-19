@@ -7,4 +7,4 @@ if (!$autoloader()) {
         'php composer.phar install' . PHP_EOL
     );
 }
-return new MCli\MCliApplication();
+return MCli\Wrapper::getInstance();
