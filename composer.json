@@ -1,0 +1,30 @@
+{
+  "name": "optimiscrime/mcli",
+  "description": "Run certain MODX tasks from the command line",
+  "license": "MIT",
+  "require": {
+    "php": ">=5.4"
+  },
+  "require-dev": {
+    "squizlabs/php_codesniffer": "^2.5",
+    "phpunit/phpunit": "^5.2",
+    "satooshi/php-coveralls": "^1.0",
+    "phpmd/phpmd": "^2.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "MCli\\": "src/MCli"
+    }
+  },
+  "scripts": {
+    "test": [
+      "@phpunit",
+      "@phpcs",
+      "@phpmd"
+    ],
+    "phpunit": "php vendor/bin/phpunit",
+    "phpcs": "php vendor/bin/phpcs",
+    "phpmd": "php vendor/bin/phpmd"
+  },
+  "bin": ["bin/mcli"]
+}
