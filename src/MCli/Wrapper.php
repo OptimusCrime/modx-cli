@@ -6,7 +6,9 @@ use MCli\Command\PackageSearchCommand;
 class Wrapper
 {
     private static $instance = null;
+
     private $modx;
+    private $cacheFile;
 
     public static function getInstance()
     {
@@ -20,6 +22,8 @@ class Wrapper
     private function __construct()
     {
         $this->modx = null;
+
+        $this->cacheFile = dirname(dirname(dirname(__FILE__))) . '/cache/mcli.cache.json';
     }
 
     /**
@@ -76,7 +80,6 @@ class Wrapper
         include_once $configFile;
 
         if (defined('MODX_CORE_PATH')) {
-            include_once MODX_CORE_PATH . 'config/config.inc.php';
             include_once MODX_CORE_PATH . 'model/modx/modx.class.php';
         }
     }
@@ -88,10 +91,11 @@ class Wrapper
         }
 
         define('MODX_API_MODE', true);
-
-        $this->modx = new \modX();
-        if (is_object($this->modx) and ($this->modx instanceof modX)) {
+        $this->modx = new \modX(MODX_CORE_PATH . 'config/');
+        if (is_object($this->modx) and ($this->modx instanceof \modX)) {
             $this->modx->initialize('mgr');
+            $this->modx->getService('error', 'error.modError', '', '');
+            $this->modx->setLogTarget('ECHO');
         }
     }
 

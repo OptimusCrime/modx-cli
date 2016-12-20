@@ -32,6 +32,27 @@ class PackageSearchCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('Foobar');
+        $response = $this->runProcessor('workspace/packages/rest/getlist', [
+            'provider' => 1,
+            'query' => 'tiny',
+        ]);
+
+        if ($response === null) {
+            return;
+        }
+
+        $index = 0;
+        foreach ($response['results'] as $package) {
+            $this->addOutput($package['name'] . ' :: ' . $package['version'] . ' [' . $index . ']');
+            $this->addOutput(BaseCommand::$separatorIndicator);
+
+            $index++;
+        }
+
+        $this->writeOutput();
+
+        $output->write(PHP_EOL);
+        $output->writeln('<info>You can now use package:install [index-number] to install the package returned by the 
+                         search.</info>');
     }
 }

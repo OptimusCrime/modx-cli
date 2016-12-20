@@ -9,7 +9,7 @@ Run certain MODX tasks from the command line.
 When this package is finished, you should be able to install it system wide using composer. After that you should be able to do:
 
 ```
-mcli [command] [options]
+mcli
 ```
 
 ## Commands
@@ -18,8 +18,29 @@ Here is a list of commands to be implemented.
 
 ### package:search
 
-Search for a package with the provided name.
+>Usage:
+> package:search [options] [--] <name>
+>Arguments:
+> name                  Package name
+
+- name: required, default parameter
+
+*Example*
+
+```
+mcli package:search tiny
+mcli package:search pdoTools
+```
 
 ### package:install
 
-TODO
+Install a package.
+
+- name/index-number: required, default parameter
+- version: optional, latest by default
+
+*Examples*
+```
+mcli package:install 2
+mcli package:install tinyemc --version=1.1.1-pl
+```
