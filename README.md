@@ -18,12 +18,12 @@ Here is a list of commands to be implemented.
 
 ### package:search
 
->Usage:
-> package:search [options] [--] <name>
->Arguments:
-> name                  Package name
-
-- name: required, default parameter
+```
+Usage:
+ package:search [options] [--] <name>
+Arguments:
+ name                  Package name
+```
 
 *Example*
 
