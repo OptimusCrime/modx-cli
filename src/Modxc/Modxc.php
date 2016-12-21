@@ -1,12 +1,12 @@
 <?php
-namespace MCli;
+namespace Modxc;
 
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputOption;
 
-class MCli extends Application
+class Modxc extends Application
 {
     protected function getDefaultInputDefinition()
     {
@@ -32,7 +32,7 @@ class MCli extends Application
                 '--version',
                 '-V',
                 InputOption::VALUE_NONE,
-                'Display the MCli version.'
+                'Display the Modxc version.'
             ),
         ]);
     }

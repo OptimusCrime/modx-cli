@@ -1,7 +1,7 @@
 <?php
-namespace MCli;
+namespace Modxc;
 
-use MCli\Command\PackageSearchCommand;
+use Modxc\Command\PackageSearchCommand;
 
 class Wrapper
 {
@@ -23,7 +23,7 @@ class Wrapper
     {
         $this->modx = null;
 
-        $this->cacheFile = dirname(dirname(dirname(__FILE__))) . '/cache/mcli.cache.json';
+        $this->cacheFile = dirname(dirname(dirname(__FILE__))) . '/cache/modxc.cache.json';
     }
 
     /**
@@ -36,7 +36,7 @@ class Wrapper
             die('Could not load MODX. Are you sure there exists a config.core.php file in this tree?');
         }
 
-        $application = new MCli('MCli', '0.0.1');
+        $application = new Modxc('Modxc', '0.0.1');
         $application->add(new PackageSearchCommand);
         $application->run();
     }

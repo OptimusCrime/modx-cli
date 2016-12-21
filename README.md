@@ -9,7 +9,7 @@ Run certain MODX tasks from the command line.
 When this package is finished, you should be able to install it system wide using composer. After that you should be able to do:
 
 ```
-mcli
+modxc
 ```
 
 ## Commands
@@ -28,8 +28,8 @@ Arguments:
 *Example*
 
 ```
-mcli package:search tiny
-mcli package:search pdoTools
+modxc package:search tiny
+modxc package:search pdoTools
 ```
 
 ### package:install
@@ -41,6 +41,6 @@ Install a package.
 
 *Examples*
 ```
-mcli package:install 2
-mcli package:install tinyemc --version=1.1.1-pl
+modxc package:install 2
+modxc package:install tinyemc --version=1.1.1-pl
 ```
