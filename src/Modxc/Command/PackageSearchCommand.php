@@ -10,7 +10,6 @@ use Modxc\Output\Handlers\TableHandler;
 
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class PackageSearchCommand extends BaseCommand
@@ -27,6 +26,9 @@ class PackageSearchCommand extends BaseCommand
             );
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         // TODO FIX THIS
@@ -38,7 +40,7 @@ class PackageSearchCommand extends BaseCommand
         ]);
 
         if ($response === null) {
-            return;
+            return null;
         }
 
         $cacheContent = [];
@@ -72,12 +74,13 @@ class PackageSearchCommand extends BaseCommand
 
         Wrapper::getInstance()->storeCache($cacheContent);
 
-        $output->write(PHP_EOL);
-        $output->write($table->output(new TableHandler()));
-        $output->write(PHP_EOL);
-        $output->writeln('<info>- You can use package:install [index-number] to install any package returned by the '
-            . 'search.</info>');
-        $output->writeln('<info>- You can use package:details [index-number] to display information about any package '
-            . 'returned by the search.</info>');
+        $this->outputInterface->write(PHP_EOL);
+        $this->outputInterface->write($table->output(new TableHandler()));
+        $this->outputInterface->write(PHP_EOL);
+
+        $this->outputInterface->writeln('<info>- You can use package:install [index-number] to install any</info>');
+        $this->outputInterface->writeln('<info>  package returned by the search.</info>');
+        $this->outputInterface->writeln('<info>- You can use package:details [index-number] to display</info>');
+        $this->outputInterface->writeln('<info>  information about any package returned by the search.</info>');
     }
 }

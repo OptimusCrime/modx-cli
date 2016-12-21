@@ -10,6 +10,7 @@ class BaseCommand extends Command
 {
     protected $modx;
     protected $outputInterface;
+    protected $inputInterface;
 
     /**
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -17,6 +18,8 @@ class BaseCommand extends Command
     public function initialize(InputInterface $input, OutputInterface $output)
     {
         $this->outputInterface = $output;
+        $this->inputInterface = $input;
+
         $this->modx = Wrapper::getInstance()->getModx();
     }
 
