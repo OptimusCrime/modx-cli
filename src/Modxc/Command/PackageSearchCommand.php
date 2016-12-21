@@ -43,6 +43,17 @@ class PackageSearchCommand extends BaseCommand
             return null;
         }
 
+        if (count($response['results']) === 0) {
+            $this->outputInterface->write(PHP_EOL);
+            $this->outputInterface->writeln('<comment>No results found.</comment>');
+            return null;
+        }
+
+        $this->outputResults($response);
+    }
+
+    private function outputResults($response)
+    {
         $cacheContent = [];
 
         $index = 0;
