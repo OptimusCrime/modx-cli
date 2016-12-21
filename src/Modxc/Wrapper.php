@@ -1,8 +1,8 @@
 <?php
 namespace Modxc;
 
-use Modxc\Command\PackageInstallCommand;
-use Modxc\Command\PackageSearchCommand;
+use Modxc\Command\Package\InstallCommand;
+use Modxc\Command\Package\SearchCommand;
 
 class Wrapper
 {
@@ -38,8 +38,8 @@ class Wrapper
         }
 
         $application = new Modxc('Modxc', '0.0.1');
-        $application->add(new PackageInstallCommand());
-        $application->add(new PackageSearchCommand);
+        $application->add(new InstallCommand());
+        $application->add(new SearchCommand);
         $application->run();
     }
 

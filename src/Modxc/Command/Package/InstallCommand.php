@@ -1,15 +1,14 @@
 <?php
-namespace Modxc\Command;
+namespace Modxc\Command\Package;
 
 use Modxc\Wrapper;
+use Modxc\Command\BaseCommand;
 
-use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class PackageInstallCommand extends BaseCommand
+class InstallCommand extends BaseCommand
 {
     protected function configure()
     {

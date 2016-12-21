@@ -1,7 +1,8 @@
 <?php
-namespace Modxc\Command;
+namespace Modxc\Command\Package;
 
 use Modxc\Wrapper;
+use Modxc\Command\BaseCommand;
 use Modxc\Output\Alignment;
 use Modxc\Output\Table\Row;
 use Modxc\Output\Table\RowSeparator;
@@ -12,7 +13,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class PackageSearchCommand extends BaseCommand
+class SearchCommand extends BaseCommand
 {
     protected function configure()
     {
