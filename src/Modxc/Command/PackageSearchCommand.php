@@ -1,6 +1,12 @@
 <?php
 namespace Modxc\Command;
 
+use Modxc\Output\Alignment;
+use Modxc\Output\Table\Row;
+use Modxc\Output\Table\RowSeparator;
+use Modxc\Output\Table\TableContainer;
+use Modxc\Output\Handlers\TableHandler;
+
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -42,17 +48,26 @@ class PackageSearchCommand extends BaseCommand
         }
 
         $index = 0;
+        $table = new TableContainer(2);
+        $rowAlignment = [Alignment::LEFT, Alignment::RIGHT];
         foreach ($response['results'] as $package) {
-            $this->addOutput($package['name'] . ' :: ' . $package['version'] . ' [' . $index . ']');
-            $this->addOutput(BaseCommand::$separatorIndicator);
+            $rowContent = [
+                $package['name'] . ' :: ' . $package['version'],
+                '[' . $index . ']'
+            ];
+
+            $table->addRow(new Row($rowContent, $rowAlignment));
+            $table->addRow(new RowSeparator());
 
             $index++;
         }
 
-        $this->writeOutput();
-
         $output->write(PHP_EOL);
-        $output->writeln('<info>You can now use package:install [index-number] to install the package returned by the 
-                         search.</info>');
+        $output->write($table->output(new TableHandler()));
+        $output->write(PHP_EOL);
+        $output->writeln('<info>- You can use package:install [index-number] to install any package returned by the '
+            . 'search.</info>');
+        $output->writeln('<info>- You can use package:details [index-number] to display information about any package '
+            . 'returned by the search.</info>');
     }
 }
