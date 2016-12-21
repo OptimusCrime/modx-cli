@@ -7,4 +7,8 @@ if (!$autoloader()) {
         'php composer.phar install' . PHP_EOL
     );
 }
+readline_completion_function(function($Input, $Index){
+    return ['Foo', 'Bar'];
+});
+
 return Modxc\Wrapper::getInstance();

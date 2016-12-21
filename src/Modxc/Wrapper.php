@@ -1,6 +1,7 @@
 <?php
 namespace Modxc;
 
+use Modxc\Command\PackageInstallCommand;
 use Modxc\Command\PackageSearchCommand;
 
 class Wrapper
@@ -37,6 +38,7 @@ class Wrapper
         }
 
         $application = new Modxc('Modxc', '0.0.1');
+        $application->add(new PackageInstallCommand());
         $application->add(new PackageSearchCommand);
         $application->run();
     }
@@ -44,6 +46,20 @@ class Wrapper
     public function getModx()
     {
         return $this->modx;
+    }
+
+    public function storeCache(array $input)
+    {
+        file_put_contents($this->cacheFile, json_encode($input));
+    }
+
+    public function getCache()
+    {
+        if (!file_exists($this->cacheFile)) {
+            return [];
+        }
+
+        return json_decode(file_get_contents($this->cacheFile), true);
     }
 
     private function loadModx()

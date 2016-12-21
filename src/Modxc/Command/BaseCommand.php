@@ -9,7 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class BaseCommand extends Command
 {
     protected $modx;
-    private $outputInterface;
+    protected $outputInterface;
 
     /**
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -28,6 +28,10 @@ class BaseCommand extends Command
             return null;
         }
 
-        return json_decode($processor->getResponse(), true);
+        if (gettype($processor->getResponse()) === 'string') {
+            return json_decode($processor->getResponse(), true);
+        }
+
+        return $processor->getResponse();
     }
 }
