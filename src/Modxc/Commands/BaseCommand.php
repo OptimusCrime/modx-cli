@@ -1,5 +1,5 @@
 <?php
-namespace Modxc\Command;
+namespace Modxc\Commands;
 
 use Modxc\Wrapper;
 use Symfony\Component\Console\Command\Command;

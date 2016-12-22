@@ -1,8 +1,8 @@
 <?php
-namespace Modxc\Command\Package;
+namespace Modxc\Commands\Package;
 
 use Modxc\Wrapper;
-use Modxc\Command\BaseCommand;
+use Modxc\Commands\BaseCommand;
 
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

@@ -1,8 +1,8 @@
 <?php
-namespace Modxc\Command\Package;
+namespace Modxc\Commands\Package;
 
 use Modxc\Wrapper;
-use Modxc\Command\BaseCommand;
+use Modxc\Commands\BaseCommand;
 use Modxc\Output\Alignment;
 use Modxc\Output\Table\Row;
 use Modxc\Output\Table\RowSeparator;

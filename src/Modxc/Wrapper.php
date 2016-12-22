@@ -1,8 +1,10 @@
 <?php
 namespace Modxc;
 
-use Modxc\Command\Package\InstallCommand;
-use Modxc\Command\Package\SearchCommand;
+use Modxc\Autocompleters\AutocompleteWrapper;
+use Modxc\Commands\Elements\CreateCommand;
+use Modxc\Commands\Package\InstallCommand;
+use Modxc\Commands\Package\SearchCommand;
 
 class Wrapper
 {
@@ -37,7 +39,10 @@ class Wrapper
             die('Could not load MODX. Are you sure there exists a config.core.php file in this tree?');
         }
 
+        AutocompleteWrapper::register();
+
         $application = new Modxc('Modxc', '0.0.1');
+        $application->add(new CreateCommand());
         $application->add(new InstallCommand());
         $application->add(new SearchCommand);
         $application->run();
