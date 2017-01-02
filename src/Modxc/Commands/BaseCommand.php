@@ -23,7 +23,7 @@ class BaseCommand extends Command
         $this->modx = Wrapper::getInstance()->getModx();
     }
 
-    protected function runProcessor($action, $options)
+    protected function runProcessor($action, $options = [])
     {
         $processor = $this->modx->runProcessor($action, $options);
         if (gettype($processor) == 'string' or $processor->isError()) {

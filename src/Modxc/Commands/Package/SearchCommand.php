@@ -32,11 +32,9 @@ class SearchCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        // TODO FIX THIS
-        $provider = 1;
-
+        // TODO: hard coded provider
         $response = $this->runProcessor('workspace/packages/rest/getlist', [
-            'provider' => $provider,
+            'provider' => 1,
             'query' => $input->getArgument('name'),
         ]);
 
@@ -77,7 +75,7 @@ class SearchCommand extends BaseCommand
             $cacheContent[] = [
                 'index' => $index,
                 'name' => $package['name'] . '-' . $package['version-compiled'],
-                'provider' => $provider,
+                'provider' => 1,
                 'signature' => $package['location'] . '::' . $package['signature']
             ];
 

@@ -11,6 +11,7 @@ class Wrapper
     private static $instance = null;
 
     private $modx;
+    private $cacheDir;
     private $cacheFile;
 
     public static function getInstance()
@@ -26,7 +27,8 @@ class Wrapper
     {
         $this->modx = null;
 
-        $this->cacheFile = dirname(dirname(dirname(__FILE__))) . '/cache/modxc.cache.json';
+        $this->cacheDir = dirname(dirname(dirname(__FILE__))) . '/cache/';
+        $this->cacheFile = $this->cacheDir . 'modxc.cache.json';
     }
 
     /**
@@ -65,6 +67,11 @@ class Wrapper
         }
 
         return json_decode(file_get_contents($this->cacheFile), true);
+    }
+
+    public function getCacheDir()
+    {
+        return $this->cacheDir;
     }
 
     private function loadModx()
