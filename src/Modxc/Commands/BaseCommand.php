@@ -28,7 +28,8 @@ class BaseCommand extends Command
         $this->defineModx($output, $modxPath);
     }
 
-    protected function defineModx(OutputInterface $output, $path) {
+    protected function defineModx(OutputInterface $output, $path)
+    {
         $this->modx = Wrapper::getInstance()->loadModx($output, $path);
     }
 
