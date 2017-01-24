@@ -42,7 +42,7 @@ class Wrapper
     {
         AutocompleteWrapper::register();
 
-        $this->application = new Modxc('Modxc', '0.0.1');
+        $this->application = new Modxc('Modxc', '0.1.0');
         $this->addCommands();
         $this->application->run();
     }
