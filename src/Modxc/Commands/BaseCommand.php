@@ -20,7 +20,16 @@ class BaseCommand extends Command
         $this->outputInterface = $output;
         $this->inputInterface = $input;
 
-        $this->modx = Wrapper::getInstance()->getModx();
+        $modxPath = null;
+        if ($input->hasOption('core_path')) {
+            $modxPath = $input->getOption('core_path');
+        }
+
+        $this->defineModx($output, $modxPath);
+    }
+
+    protected function defineModx(OutputInterface $output, $path) {
+        $this->modx = Wrapper::getInstance()->loadModx($output, $path);
     }
 
     protected function runProcessor($action, $options = [])

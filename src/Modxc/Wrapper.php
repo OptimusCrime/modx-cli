@@ -3,13 +3,17 @@ namespace Modxc;
 
 use Modxc\Autocompleters\AutocompleteWrapper;
 use Modxc\Commands\Elements\CreateCommand;
+use Modxc\Commands\Package\BuildCommand;
 use Modxc\Commands\Package\InstallCommand;
 use Modxc\Commands\Package\SearchCommand;
+
+use Symfony\Component\Console\Output\OutputInterface;
 
 class Wrapper
 {
     private static $instance = null;
 
+    private $application;
     private $modx;
     private $cacheDir;
     private $cacheFile;
@@ -36,18 +40,22 @@ class Wrapper
      */
     public function run()
     {
-        $this->loadModx();
-        if ($this->modx === null) {
-            die('Could not load MODX. Are you sure there exists a config.core.php file in this tree?');
-        }
-
         AutocompleteWrapper::register();
 
-        $application = new Modxc('Modxc', '0.0.1');
-        $application->add(new CreateCommand());
-        $application->add(new InstallCommand());
-        $application->add(new SearchCommand);
-        $application->run();
+        $this->application = new Modxc('Modxc', '0.0.1');
+        $this->addCommands();
+        $this->application->run();
+    }
+
+    private function addCommands()
+    {
+        // Elements
+        $this->application->add(new CreateCommand());
+
+        // Packages
+        $this->application->add(new BuildCommand());
+        $this->application->add(new InstallCommand());
+        $this->application->add(new SearchCommand());
     }
 
     public function getModx()
@@ -74,7 +82,35 @@ class Wrapper
         return $this->cacheDir;
     }
 
-    private function loadModx()
+    public function loadModx(OutputInterface $output, $path = null)
+    {
+        $this->loadModxFiles($path);
+
+        if ($this->modx === null) {
+            $output->write(PHP_EOL);
+            $output->writeln('<error>Could not load MODX.</error>');
+            $output->write(PHP_EOL);
+            $output->writeln('<comment>If you did not provide a MODX core path for this command, are you</comment>');
+            $output->writeln('<comment>sure there exists a MODX installation in your current working</comment>');
+            $output->writeln('<comment>directory tree?</comment>');
+
+            die();
+        }
+
+        return $this->modx;
+    }
+
+    private function loadModxFiles($path = null)
+    {
+        if ($path === null) {
+            $this->loadModxInWorkingDirectory();
+            return;
+        }
+
+        $this->loadModxFromCorePath($path);
+    }
+
+    private function loadModxInWorkingDirectory()
     {
         $configFile = $this->locateConfigFile();
         if ($configFile === null) {
@@ -85,12 +121,26 @@ class Wrapper
         $this->initModx();
     }
 
+    private function loadModxFromCorePath($configFilePath)
+    {
+        if (substr($configFilePath, -1) !== '/') {
+            $configFilePath .= '/';
+        }
+
+        $configFilePath .= 'config/config.inc.php';
+
+        if ($this->validateConfigFile($configFilePath)) {
+            $this->loadFiles($configFilePath);
+            $this->initModx();
+        }
+    }
+
     private function locateConfigFile()
     {
         $currentPath = getcwd();
         while (true) {
             $configFilePath = $currentPath . '/config.core.php';
-            if (file_exists($configFilePath) and is_readable($configFilePath)) {
+            if ($this->validateConfigFile($configFilePath)) {
                 return $configFilePath;
             }
 
@@ -103,9 +153,20 @@ class Wrapper
         }
     }
 
+    private function validateConfigFile($configFile)
+    {
+        if (file_exists($configFile) and is_readable($configFile)) {
+            return true;
+        }
+
+        return false;
+    }
+
     private function loadFiles($configFile)
     {
-        include_once $configFile;
+        if (!defined('MODX_CORE_PATH')) {
+            include_once $configFile;
+        }
 
         if (defined('MODX_CORE_PATH')) {
             include_once MODX_CORE_PATH . 'model/modx/modx.class.php';
