@@ -1,3 +1,4 @@
-# MCli 0.0.1-dev
+modxc - 0.1.0-pl        (2017.01.24)
+====================================
 
-- Initial version
+- [Info] Initial release
