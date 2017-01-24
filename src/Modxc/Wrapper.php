@@ -180,7 +180,7 @@ class Wrapper
         }
 
         define('MODX_API_MODE', true);
-        $this->modx = new \modX(MODX_CORE_PATH . 'config/');
+        $this->modx = new \modX();
         if (is_object($this->modx) and ($this->modx instanceof \modX)) {
             $this->modx->initialize('mgr');
             $this->modx->getService('error', 'error.modError', '', '');
