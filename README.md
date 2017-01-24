@@ -12,7 +12,7 @@ Install using [Composer](https://getcomposer.org) with
 composer global require optimuscrime/modx-cli
 ```
 
-You must also make sure the path where the globally downloaded packages are added to your `PATH`. [Instructions here](https://coderwall.com/p/ma_cuq/using-composer-to-manage-global-packages).
+You must also make sure the path where the globally downloaded packages are added to your `PATH`. [Instructions here](https://coderwall.com/p/ma_cuq/using-composer-to-manage-global-packages). After this, you should be able to call the application with
 
 ```
 modxc
@@ -40,7 +40,7 @@ Arguments:
   name                  Package name
 ```
 
-*Example*
+*Examples*
 
 ```
 modxc package:search tiny
