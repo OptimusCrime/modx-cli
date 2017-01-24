@@ -9,7 +9,7 @@ Convenient command line tool to ease MODX development.
 Install using [Composer](https://getcomposer.org) with
 
 ```
-composer global require optimuscrime/modx-cli
+composer global require optimuscrime/modxc
 ```
 
 You must also make sure the path where the globally downloaded packages are added to your `PATH`. [Instructions here](https://coderwall.com/p/ma_cuq/using-composer-to-manage-global-packages). After this, you should be able to call the application with
