@@ -50,10 +50,10 @@ class Wrapper
     private function addCommands()
     {
         // Elements
-        $this->application->add(new CreateCommand());
+        //$this->application->add(new CreateCommand());
 
         // Packages
-        $this->application->add(new BuildCommand());
+        //$this->application->add(new BuildCommand());
         $this->application->add(new InstallCommand());
         $this->application->add(new SearchCommand());
     }
