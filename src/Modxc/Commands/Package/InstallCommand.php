@@ -14,12 +14,14 @@ class InstallCommand extends BaseCommand
 {
     // Welcome to world championship in terrible regex patterns. We want to match (and capture) repository links.
     // Example patterns:
-    // - https://github.com/OptimusCrime/modx-staticcollector#tag=derpderderderp
+    // - https://github.com/OptimusCrime/modx-staticcollector?tag=1.1.1
+    // - https://github.com/OptimusCrime/modx-staticcollector?release=1.0.0-pl
+    // - https://github.com/OptimusCrime/modx-staticcollector?commit=cad3b0ceec3e03d13a98bf04bd8d995154fe6a21
+    // - https://github.com/OptimusCrime/modx-staticcollector?branch=master
     // - http://github.com/OptimusCrime/modx-staticcollector
     // - github.com/derp/derp
     // - git@github.com:OptimusCrime/modx-staticcollector.git
     // - https://github.com/OptimusCrime/modx-staticcollector.git
-    // - https://github.com/OptimusCrime/modx-staticcollector.git#tag=
 
     const GITHUB_REPOSITORY_PACKAGE =  "/^"
 
@@ -44,7 +46,7 @@ class InstallCommand extends BaseCommand
         . "(?:\.git)?"
 
         // TODO implement system to support tag/commit/whatever
-        . "#?(?P<fetch>.*)?"
+        . "\\??(?P<fetch>.*)?"
         . "/";
 
     private $zipName;
@@ -128,7 +130,7 @@ class InstallCommand extends BaseCommand
     private function prepareRepositoryPackage()
     {
         $matches = self::getRepositoryData($this->inputInterface->getArgument('input'));
-        $downloaded = $this->downloadRepositoryPackage($matches['owner'][0], $matches['repo'][0]);
+        $downloaded = $this->downloadRepositoryPackage($matches['owner'][0], $matches['repo'][0], $matches['fetch'][0]);
 
         $this->modxBaseDirContents = self::getModxBaseDirFiles(
             Wrapper::getInstance()->getModx()->getOption('base_path')
@@ -227,10 +229,15 @@ class InstallCommand extends BaseCommand
         }
     }
 
-    private function downloadRepositoryPackage($owner, $name)
+    private function downloadRepositoryPackage($owner, $name, $fetch)
     {
         $this->zipName = self::generateTempZipName();
-        $repositoryUrl = 'https://github.com/' . $owner . '/' . $name . '/archive/master.zip';
+        $repositoryUrl = self::buildGitHubDownloadLink($owner, $name, $fetch);
+
+        if ($repositoryUrl === null) {
+            return null;
+        }
+
         $targetDir = Wrapper::getInstance()->getCacheDir() . $this->zipName . '.zip';
 
         $this->outputInterface->writeln('<comment>Downloading package from ' . $repositoryUrl . '</comment>');
@@ -250,6 +257,29 @@ class InstallCommand extends BaseCommand
         $this->outputInterface->writeln('<info>Successfully downloaded repository zip.</info>');
 
         return true;
+    }
+
+    private static function buildGitHubDownloadLink($owner, $name, $fetch)
+    {
+        if (strlen($fetch) === 0 or $fetch == '' or $fetch == null) {
+            return self::buildGitHubFetchDownloadLink($owner, $name, 'master');
+        }
+
+        if (strpos($fetch, '=') === false) {
+            return null;
+        }
+
+        $fetchSplit = explode('=', $fetch);
+        if (!in_array($fetchSplit[0], ['tag', 'release', 'branch', 'commit']) or strlen($fetchSplit[1]) === 0) {
+            return null;
+        }
+
+        return self::buildGitHubFetchDownloadLink($owner, $name, $fetchSplit[1]);
+    }
+
+    private static function buildGitHubFetchDownloadLink($owner, $name, $value)
+    {
+        return 'https://github.com/' . $owner . '/' . $name . '/archive/' . $value . '.zip';
     }
 
     private function unpackageRepositoryPackageFile()
